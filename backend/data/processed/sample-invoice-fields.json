@@ -1,0 +1,77 @@
+{
+  "model_id": "prebuilt-invoice",
+  "content": "NORTHSTAR\nINVOICE\nInvoice number: NS-2026-001\nInvoice date: 15 August 2026\nSupplier: Blue River Consulting\nPayment terms: Net 30 days\nDescription\nQuantity\nRate\nAmount\nConsulting services\n10 hours\nUSD 125.00\nUSD 1,250.00\nTotal due: USD 1,250.00\nSynthetic document created for the Azure Document Intelligence Hub.",
+  "page_count": 1,
+  "tables": [
+    [
+      [
+        "Description",
+        "Quantity",
+        "Rate",
+        "Amount"
+      ],
+      [
+        "Consulting services",
+        "10 hours",
+        "USD 125.00",
+        "USD 1,250.00"
+      ]
+    ]
+  ],
+  "quality": {
+    "status": "needs_review",
+    "minimum_confidence": 0.8,
+    "issues": [
+      {
+        "field": "InvoiceTotal",
+        "reason": "low_confidence",
+        "confidence": 0.658,
+        "message": "InvoiceTotal has confidence 0.658, below the 0.8 review threshold."
+      },
+      {
+        "field": "Items",
+        "reason": "missing_content",
+        "message": "Items did not contain an extracted value."
+      }
+    ]
+  },
+  "documents": [
+    {
+      "document_type": "invoice",
+      "confidence": 1.0,
+      "fields": {
+        "InvoiceDate": {
+          "content": "15 August 2026",
+          "value_type": "DocumentFieldType.DATE",
+          "confidence": 0.933
+        },
+        "InvoiceId": {
+          "content": "NS-2026-001",
+          "value_type": "DocumentFieldType.STRING",
+          "confidence": 0.989
+        },
+        "InvoiceTotal": {
+          "content": "USD 1,250.00",
+          "value_type": "DocumentFieldType.CURRENCY",
+          "confidence": 0.658
+        },
+        "Items": {
+          "content": null,
+          "value_type": "DocumentFieldType.ARRAY",
+          "confidence": null
+        },
+        "PaymentTerm": {
+          "content": "Net 30 days",
+          "value_type": "DocumentFieldType.STRING",
+          "confidence": 0.919
+        },
+        "VendorName": {
+          "content": "NORTHSTAR",
+          "value_type": "DocumentFieldType.STRING",
+          "confidence": 0.874
+        }
+      }
+    }
+  ],
+  "paragraphs": []
+}

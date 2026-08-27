@@ -1,0 +1,87 @@
+{
+  "model_id": "prebuilt-layout",
+  "content": "NORTHSTAR\n\n\n# INVOICE\n\nInvoice number: NS-2026-001\n\nInvoice date: 15 August 2026\n\nSupplier: Blue River Consulting\n\nPayment terms: Net 30 days\n\n\n<table>\n<tr>\n<th>Description</th>\n<th>Quantity</th>\n<th>Rate</th>\n<th>Amount</th>\n</tr>\n<tr>\n<td>Consulting services</td>\n<td>10 hours</td>\n<td>USD 125.00</td>\n<td>USD 1,250.00</td>\n</tr>\n</table>\n\n\nTotal due: USD 1,250.00\n\n<!-- PageFooter=\"Synthetic document created for the Azure Document Intelligence Hub.\" -->\n",
+  "page_count": 1,
+  "tables": [
+    [
+      [
+        "Description",
+        "Quantity",
+        "Rate",
+        "Amount"
+      ],
+      [
+        "Consulting services",
+        "10 hours",
+        "USD 125.00",
+        "USD 1,250.00"
+      ]
+    ]
+  ],
+  "paragraphs": [
+    {
+      "content": "NORTHSTAR",
+      "role": null
+    },
+    {
+      "content": "INVOICE",
+      "role": "ParagraphRole.TITLE"
+    },
+    {
+      "content": "Invoice number: NS-2026-001",
+      "role": null
+    },
+    {
+      "content": "Invoice date: 15 August 2026",
+      "role": null
+    },
+    {
+      "content": "Supplier: Blue River Consulting",
+      "role": null
+    },
+    {
+      "content": "Payment terms: Net 30 days",
+      "role": null
+    },
+    {
+      "content": "Description",
+      "role": null
+    },
+    {
+      "content": "Quantity",
+      "role": null
+    },
+    {
+      "content": "Rate",
+      "role": null
+    },
+    {
+      "content": "Amount",
+      "role": null
+    },
+    {
+      "content": "Consulting services",
+      "role": null
+    },
+    {
+      "content": "10 hours",
+      "role": null
+    },
+    {
+      "content": "USD 125.00",
+      "role": null
+    },
+    {
+      "content": "USD 1,250.00",
+      "role": null
+    },
+    {
+      "content": "Total due: USD 1,250.00",
+      "role": null
+    },
+    {
+      "content": "Synthetic document created for the Azure Document Intelligence Hub.",
+      "role": "ParagraphRole.PAGE_FOOTER"
+    }
+  ]
+}

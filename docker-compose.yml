@@ -1,0 +1,48 @@
+name: azure-document-intelligence-hub
+
+services:
+  api:
+    build:
+      context: ./backend
+    env_file:
+      - ./backend/.env
+    environment:
+      APP_ENV: local-docker
+      CORS_ORIGINS: http://localhost:5173,http://localhost:8080
+      MAX_QUESTION_LENGTH: 500
+    ports:
+      - "8001:8000"
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/api/v1/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 15s
+    
+
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_BASE_URL: http://localhost:8001
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+
+  azurite:
+    image: mcr.microsoft.com/azure-storage/azurite:3.33.0
+    command: >
+      azurite --blobHost 0.0.0.0 --blobPort 10000
+      --location /data --debug /data/debug.log --skipApiVersionCheck
+    ports:
+      - "10000:10000"
+    volumes:
+      - ./.azurite:/data

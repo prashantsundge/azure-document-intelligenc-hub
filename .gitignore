@@ -1,0 +1,42 @@
+*.egg-info/
+
+# Secrets and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.pfx
+
+# Python
+backend/.venv/
+backend/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+backend/.mypy_cache/
+backend/.ruff_cache/
+backend/coverage.xml
+backend/htmlcov/
+
+# Node / React
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+
+# Docker and Azurite local data
+.azurite/
+docker-data/
+
+# Azure local tooling
+.azure/
+.azd/
+
+# Editor and operating system files
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log

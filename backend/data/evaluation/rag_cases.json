@@ -1,0 +1,14 @@
+[
+  {
+    "id": "remote-work-equipment",
+    "question": "What equipment is provided for employees who work from home?",
+    "expected_terms": ["laptop", "monitor", "security key"],
+    "expected_document_id": "remote-work-policy"
+  },
+  {
+    "id": "invoice-payment-term",
+    "question": "When is payment due for the sample invoice?",
+    "expected_terms": ["net 30"],
+    "expected_document_id": "sample-invoice"
+  }
+]
