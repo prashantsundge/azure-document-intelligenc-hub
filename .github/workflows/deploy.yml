@@ -61,6 +61,7 @@ jobs:
 
           docker build \
             --platform linux/amd64 \
+            --build-arg VITE_API_BASE_URL="https://ca-docintel-api-dev.blackwave-0f15539d.eastus.azurecontainerapps.io" \
             --file frontend/Dockerfile \
             --tag "$FRONTEND_IMAGE" \
             frontend
