@@ -1,0 +1,112 @@
+name: Deploy to Azure Container Apps
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - backend/**
+      - frontend/**
+      - infra/**
+      - .github/workflows/deploy.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+concurrency:
+  group: production-deployment
+  cancel-in-progress: false
+
+env:
+  RESOURCE_GROUP: rg-document-intelligence-hub-dev
+  ACR_NAME: acrdocintelawjtcgryz5xpw
+  ACR_LOGIN_SERVER: acrdocintelawjtcgryz5xpw.azurecr.io
+  API_APP_NAME: ca-docintel-api-dev
+  FRONTEND_APP_NAME: ca-docintel-web-dev
+
+jobs:
+  deploy:
+    name: Build and deploy production containers
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Authenticate to Azure with OIDC
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Build and push container images
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          az acr login --name "$ACR_NAME"
+
+          API_IMAGE="$ACR_LOGIN_SERVER/document-intelligence-hub-api:${GITHUB_SHA}"
+          FRONTEND_IMAGE="$ACR_LOGIN_SERVER/document-intelligence-hub-frontend:${GITHUB_SHA}"
+
+          docker build \
+            --platform linux/amd64 \
+            --file backend/Dockerfile \
+            --tag "$API_IMAGE" \
+            backend
+
+          docker build \
+            --platform linux/amd64 \
+            --file frontend/Dockerfile \
+            --tag "$FRONTEND_IMAGE" \
+            frontend
+
+          docker push "$API_IMAGE"
+          docker push "$FRONTEND_IMAGE"
+
+          echo "API_IMAGE=$API_IMAGE" >> "$GITHUB_ENV"
+          echo "FRONTEND_IMAGE=$FRONTEND_IMAGE" >> "$GITHUB_ENV"
+
+      - name: Update Azure Container Apps
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          az containerapp update \
+            --name "$API_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --image "$API_IMAGE"
+
+          az containerapp update \
+            --name "$FRONTEND_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --image "$FRONTEND_IMAGE"
+
+      - name: Verify deployed API health
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          API_FQDN="$(az containerapp show \
+            --name "$API_APP_NAME" \
+            --resource-group "$RESOURCE_GROUP" \
+            --query "properties.configuration.ingress.fqdn" \
+            --output tsv)"
+
+          for attempt in {1..12}; do
+            if curl --fail --silent --show-error \
+              "https://${API_FQDN}/api/v1/health"; then
+              echo "Deployment health check passed."
+              exit 0
+            fi
+
+            echo "Waiting for revision to become healthy: attempt ${attempt}/12"
+            sleep 10
+          done
+
+          echo "Deployment health check failed."
+          exit 1
