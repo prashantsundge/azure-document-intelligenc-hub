@@ -13,6 +13,9 @@ param containerRegistryLoginServer string
 @description('Full API image name, including tag.')
 param apiImage string
 
+@description('Azure Key Vault URI, ending with a forward slash.')
+param keyVaultUri string
+
 @description('Allowed public frontend origin for browser CORS requests.')
 param frontendOrigin string
 
@@ -33,18 +36,6 @@ param azureOpenAiEmbeddingDeployment string
 
 @description('Azure AI Content Safety endpoint.')
 param contentSafetyEndpoint string
-
-@secure()
-@description('Azure AI Search admin key.')
-param azureSearchAdminKey string
-
-@secure()
-@description('Azure OpenAI API key.')
-param azureOpenAiApiKey string
-
-@secure()
-@description('Azure AI Content Safety key.')
-param contentSafetyKey string
 
 var apiContainerAppName = 'ca-docintel-api-dev'
 
@@ -104,15 +95,18 @@ resource api 'Microsoft.App/containerApps@2025-02-02-preview' = {
       secrets: [
         {
           name: 'search-admin-key'
-          value: azureSearchAdminKey
+          keyVaultUrl: '${keyVaultUri}secrets/azure-search-admin-key'
+          identity: managedIdentityId
         }
         {
           name: 'openai-api-key'
-          value: azureOpenAiApiKey
+          keyVaultUrl: '${keyVaultUri}secrets/azure-openai-api-key'
+          identity: managedIdentityId
         }
         {
           name: 'content-safety-key'
-          value: contentSafetyKey
+          keyVaultUrl: '${keyVaultUri}secrets/content-safety-key'
+          identity: managedIdentityId
         }
       ]
     }
