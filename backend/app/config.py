@@ -27,7 +27,7 @@ class Settings(BaseSettings):
     azure_openai_embedding_deployment: str | None = None
     content_safety_endpoint: str | None = None
     content_safety_key: str | None = None
-
+    applicationinsights_connection_string: str | None = None
     
 
     model_config = SettingsConfigDict(

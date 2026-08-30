@@ -108,6 +108,11 @@ resource api 'Microsoft.App/containerApps@2025-02-02-preview' = {
           keyVaultUrl: '${keyVaultUri}secrets/content-safety-key'
           identity: managedIdentityId
         }
+        {
+        name: 'app-insights-connection-string'
+        keyVaultUrl: '${keyVaultUri}secrets/application-insights-connection-string'
+        identity: managedIdentityId
+        }
       ]
     }
     template: {
@@ -159,6 +164,10 @@ resource api 'Microsoft.App/containerApps@2025-02-02-preview' = {
             {
               name: 'CONTENT_SAFETY_KEY'
               secretRef: 'content-safety-key'
+            }
+            {
+            name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
+            secretRef: 'app-insights-connection-string'
             }
           ]
         }

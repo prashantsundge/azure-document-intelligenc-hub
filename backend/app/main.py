@@ -16,8 +16,17 @@ from app.models import (
     MetricsSummary,
     SearchResponse,
 )
-from app.services.catalog import answer_question, get_document, list_documents, search_documents
+from app.services.catalog import (
+    answer_question,
+    get_document,
+    list_documents,
+    search_documents,
+)
 from app.services.content_safety import UnsafeContentError
+from app.telemetry import configure_telemetry
+
+# Must run before the FastAPI application instance is created below.
+configure_telemetry()
 
 settings = get_settings()
 
