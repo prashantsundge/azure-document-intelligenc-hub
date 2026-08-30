@@ -1,8 +1,17 @@
-@description('GitHub owner and repository, without .git. Example: owner/repository.')
-param githubRepository string = 'prashantsundge/azure-document-intelligenc-hub'
+@description('GitHub repository owner.')
+param githubOwner string = 'prashantsundge'
 
-@description('Only this GitHub branch can use the Azure deployment identity.')
-param githubBranch string = 'main'
+@description('Immutable GitHub numeric owner ID.')
+param githubOwnerId string = '120663250'
+
+@description('GitHub repository name without .git.')
+param githubRepositoryName string = 'azure-document-intelligenc-hub'
+
+@description('Immutable GitHub numeric repository ID.')
+param githubRepositoryId string = '1348784684'
+
+@description('Protected GitHub Actions environment allowed to deploy.')
+param githubEnvironment string = 'production'
 
 @description('Existing Azure Container Registry name.')
 param containerRegistryName string = 'acrdocintelawjtcgryz5xpw'
@@ -51,15 +60,15 @@ resource githubDeploymentIdentity 'Microsoft.ManagedIdentity/userAssignedIdentit
   }
 }
 
-resource githubMainFederatedCredential 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
+resource githubProductionFederatedCredential 'Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2023-01-31' = {
   parent: githubDeploymentIdentity
-  name: 'github-main'
+  name: 'github-production'
   properties: {
     audiences: [
       'api://AzureADTokenExchange'
     ]
     issuer: 'https://token.actions.githubusercontent.com'
-    subject: 'repo:${githubRepository}:ref:refs/heads/${githubBranch}'
+    subject: 'repo:${githubOwner}@${githubOwnerId}/${githubRepositoryName}@${githubRepositoryId}:environment:${githubEnvironment}'
   }
 }
 
