@@ -37,6 +37,9 @@ param azureOpenAiEmbeddingDeployment string
 @description('Azure AI Content Safety endpoint.')
 param contentSafetyEndpoint string
 
+@description('Blob endpoint for the private documents storage account.')
+param azureStorageAccountUrl string
+
 var apiContainerAppName = 'ca-docintel-api-dev'
 
 resource api 'Microsoft.App/containerApps@2025-02-02-preview' = {
@@ -168,6 +171,18 @@ resource api 'Microsoft.App/containerApps@2025-02-02-preview' = {
             {
             name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
             secretRef: 'app-insights-connection-string'
+            }
+            {
+            name: 'AZURE_STORAGE_USE_MANAGED_IDENTITY'
+            value: 'true'
+            }
+            {
+            name: 'AZURE_STORAGE_ACCOUNT_URL'
+            value: azureStorageAccountUrl
+            }
+            {
+            name: 'AZURE_STORAGE_CONTAINER_NAME'
+            value: 'documents'
             }
           ]
         }

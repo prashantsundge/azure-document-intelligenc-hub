@@ -28,8 +28,8 @@ class Settings(BaseSettings):
     content_safety_endpoint: str | None = None
     content_safety_key: str | None = None
     applicationinsights_connection_string: str | None = None
-    
-
+    azure_storage_account_url: str | None = None
+    azure_storage_use_managed_identity: bool = False    
     model_config = SettingsConfigDict(
         env_file=".env",
         env_file_encoding="utf-8",
