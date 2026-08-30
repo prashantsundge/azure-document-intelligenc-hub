@@ -23,80 +23,6 @@ Organizations store policies, invoices, and operational documents in formats tha
 - Screens user prompts and generated answers with Azure AI Content Safety.
 - Runs locally with Docker and is prepared for GitHub CI/CD.
 
-## Architecture
-## 1. Overall industry architecture
-
-
-```mermaid
-flowchart TB
-    User[Public user] --> Web[React frontend<br/>Azure Container Apps]
-    Web -->|HTTPS API calls| API[FastAPI backend<br/>Azure Container Apps]
-
-    API --> Search[Azure AI Search<br/>keyword + vector retrieval]
-    API --> OpenAI[Azure OpenAI<br/>embeddings + grounded answers]
-    API --> Safety[Azure AI Content Safety]
-    API --> Insights[Application Insights]
-
-    Admin[Administrator / local developer] --> Ingest[Python ingestion scripts]
-    Ingest --> Blob[Azure Blob Storage<br/>private documents]
-    Ingest --> DI[Azure AI Document Intelligence]
-    Ingest --> Language[Azure AI Language]
-    Ingest --> Search
-
-    API --> KeyVault[Azure Key Vault]
-    KeyVault --> API
-
-    GitHub[GitHub Actions] -->|OIDC| ACR[Azure Container Registry]
-    ACR --> Web
-    ACR --> API
-```
-
-```mermaid
-flowchart TB
-    User[Public React UI] -->|HTTPS / REST| API[FastAPI API]
-
-    API --> Blob[Azure Blob Storage]
-    API --> DI[Azure AI Document Intelligence]
-    API --> Language[Azure AI Language]
-    API --> Search[Azure AI Search]
-    API --> OpenAI[Azure OpenAI]
-    API --> Safety[Azure AI Content Safety]
-
-    DI --> Processed[Processed JSON artifacts]
-    Language --> Processed
-    Processed --> Search
-
-    OpenAI --> Embeddings[text-embedding-3-small]
-    OpenAI --> Chat[gpt-4.1-mini]
-
-    Search --> RAG[Hybrid retrieval context]
-    RAG --> Chat
-    Safety --> API
-
-
-
-
-    ## Documentation
-
-- [Architecture](docs/architecture.md)
-- [Azure setup](docs/azure-setup.md)
-- [Operations runbook](docs/runbook.md)
-- [Azure AI learning map](docs/learning-map.md)
-- [Contributing](CONTRIBUTING.md)
-
-## Safety and privacy
-
-This project uses only synthetic or openly licensed sample documents. Do not upload company documents, personal data, API keys, or connection strings.
-
-## Roadmap
-
-Project 1 focuses on document intelligence, language, search/RAG, responsible AI, secure deployment, and observability.
-
-Future projects will focus on speech/custom vision and agentic AI workflows.
-
-
-
-
 
 Think of the project as two separate systems:
 
@@ -314,35 +240,7 @@ flowchart LR
 | GitHub Actions | Runs CI and production deployment. |
 | GitHub OIDC | Lets GitHub authenticate to Azure without client secrets. |
 
-
-
-
-
-```mermaid
-flowchart TB
-    User[Public user] --> Web[React frontend<br/>Azure Container Apps]
-    Web -->|HTTPS API calls| API[FastAPI backend<br/>Azure Container Apps]
-
-    API --> Search[Azure AI Search<br/>keyword + vector retrieval]
-    API --> OpenAI[Azure OpenAI<br/>embeddings + grounded answers]
-    API --> Safety[Azure AI Content Safety]
-    API --> Insights[Application Insights]
-
-    Admin[Administrator / local developer] --> Ingest[Python ingestion scripts]
-    Ingest --> Blob[Azure Blob Storage<br/>private documents]
-    Ingest --> DI[Azure AI Document Intelligence]
-    Ingest --> Language[Azure AI Language]
-    Ingest --> Search
-
-    API --> KeyVault[Azure Key Vault]
-    KeyVault --> API
-
-    GitHub[GitHub Actions] -->|OIDC| ACR[Azure Container Registry]
-    ACR --> Web
-    ACR --> API
-```
-
-
+Your two current documents are simply the safe demonstration dataset. The platform itself is designed to support many policies, invoices, contracts, SOPs, compliance documents, and knowledge-base files.
 
 
 
