@@ -31,6 +31,10 @@ Think of the project as two separate systems:
 
 ## 1. Overall industry architecture
 
+
+<img width="1855" height="834" alt="Azure Document Intelligence Hub1" src="https://github.com/user-attachments/assets/f0e85657-b9b1-4605-b0d1-80693d167db0" />
+
+
 ```mermaid
 flowchart TB
     User[Public user] --> Web[React frontend<br/>Azure Container Apps]
